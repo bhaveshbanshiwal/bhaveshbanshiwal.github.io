@@ -141,11 +141,20 @@ async function fetchGitHubProjects() {
 
         // 2. Fallback if pinned repos fail, are empty, or throw an error
         if (repos.length === 0) {
-            const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=6');
+            const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=15');
             if (response.ok) {
                 const fallbackRepos = await response.json();
                 if (Array.isArray(fallbackRepos)) {
-                    repos = fallbackRepos.filter(r => !r.fork);
+                    // Repos to NEVER show in the fallback list (not projects)
+                    const excludeList = [
+                        'bhaveshbanshiwal.github.io', 
+                        'first-contributions',
+                        'cp',
+                        'cpp',
+                        'tkinter',
+                        'ollama-python' // Assuming this is just a fork/library test
+                    ];
+                    repos = fallbackRepos.filter(r => !r.fork && !excludeList.includes(r.name)).slice(0, 6);
                 }
             }
         }
