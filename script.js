@@ -184,3 +184,44 @@ async function fetchGitHubProjects() {
     }
 }
 fetchGitHubProjects();
+
+// --- Dynamic Open Source Contributions Fetch ---
+async function fetchOpenSource() {
+    const container = document.getElementById('opensource-container');
+    try {
+        const response = await fetch('https://api.github.com/search/issues?q=is:pr+author:bhaveshbanshiwal+is:public');
+        if (response.ok) {
+            const data = await response.json();
+            const items = data.items || [];
+            
+            // Limit to 4 PRs for display
+            items.slice(0, 4).forEach(pr => {
+                // Extract repo name from repository_url
+                const repoUrlParts = pr.repository_url.split('/');
+                const repoName = repoUrlParts[repoUrlParts.length - 1];
+                const repoOwner = repoUrlParts[repoUrlParts.length - 2];
+                const stateIcon = pr.state === 'closed' ? '<i class="fas fa-code-merge" style="color: #8b5cf6;"></i>' : '<i class="fas fa-code-branch" style="color: #10b981;"></i>';
+                
+                const card = document.createElement('div');
+                card.className = 'project-card glass-card reveal active';
+                
+                card.innerHTML = `
+                    <div class="project-content">
+                        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">${repoOwner}/${repoName}</h3>
+                        <p style="font-size: 0.95rem; margin-bottom: 1rem;">${stateIcon} ${pr.title}</p>
+                        <div class="project-tags">
+                            <span class="tag-small">Pull Request</span>
+                            <span class="tag-small">${pr.state}</span>
+                        </div>
+                        <a href="${pr.html_url}" target="_blank" class="project-link" style="margin-top: 1rem;"><i class="fab fa-github"></i> View PR</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            if (typeof reveal === 'function') reveal();
+        }
+    } catch (error) {
+        console.error('Error fetching Open Source PRs:', error);
+    }
+}
+fetchOpenSource();
