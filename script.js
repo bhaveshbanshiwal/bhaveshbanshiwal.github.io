@@ -125,38 +125,42 @@ async function fetchGitHubProjects() {
     const container = document.getElementById('projects-container');
     try {
         let repos = [];
-        // First try fetching pinned repos from proxy API
-        const pinnedResponse = await fetch('https://gh-pinned-repos.egoist.dev/?username=bhaveshbanshiwal').catch(() => null);
-        if (pinnedResponse && pinnedResponse.ok) {
-            const pinnedData = await pinnedResponse.json();
-            if (Array.isArray(pinnedData) && pinnedData.length > 0) {
-                repos = pinnedData;
+        
+        // 1. Try fetching pinned repos
+        try {
+            const pinnedResponse = await fetch('https://gh-pinned-repos.egoist.dev/?username=bhaveshbanshiwal');
+            if (pinnedResponse.ok) {
+                const pinnedData = await pinnedResponse.json();
+                if (Array.isArray(pinnedData) && pinnedData.length > 0) {
+                    repos = pinnedData;
+                }
             }
+        } catch (e) {
+            console.warn("Could not fetch pinned repos, falling back to recent repos...", e);
         }
 
-        // Fallback if pinned repos fail or user has none
+        // 2. Fallback if pinned repos fail, are empty, or throw an error
         if (repos.length === 0) {
             const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=6');
-            repos = await response.json();
-            // Filter forks
-            if (Array.isArray(repos)) repos = repos.filter(r => !r.fork);
+            if (response.ok) {
+                const fallbackRepos = await response.json();
+                if (Array.isArray(fallbackRepos)) {
+                    repos = fallbackRepos.filter(r => !r.fork);
+                }
+            }
         }
         
-        if (Array.isArray(repos)) {
+        // 3. Render
+        if (Array.isArray(repos) && repos.length > 0) {
             repos.forEach(repo => {
                 const card = document.createElement('div');
                 card.className = 'project-card glass-card reveal active';
                 
-                // Determine language tag
                 const langHtml = repo.language ? `<span class="tag-small">${repo.language}</span>` : '';
-                
-                // Determine stars (pinned API returns repo.stars instead of stargazers_count)
                 const stars = repo.stars || repo.stargazers_count || 0;
                 const starHtml = stars > 0 ? `<span class="tag-small">⭐ ${stars}</span>` : '';
                 
-                // Link is repo.link or repo.html_url
                 const url = repo.link || repo.html_url;
-                // Name
                 const name = (repo.repo || repo.name).replace(/-/g, ' ').replace(/_/g, ' ');
                 
                 card.innerHTML = `
@@ -172,11 +176,16 @@ async function fetchGitHubProjects() {
                 `;
                 container.appendChild(card);
             });
-            // Trigger reveal animation for newly added elements
             if (typeof reveal === 'function') reveal();
+        } else {
+            // Render a fallback message if API limits hit
+            const card = document.createElement('div');
+            card.className = 'project-card glass-card reveal active';
+            card.innerHTML = `<div class="project-content"><p>Unable to load GitHub repositories (API limit may be reached). Please check my GitHub profile directly!</p></div>`;
+            container.appendChild(card);
         }
     } catch (error) {
-        console.error('Error fetching GitHub repos:', error);
+        console.error('Fatal error fetching GitHub repos:', error);
     }
 }
 fetchGitHubProjects();
