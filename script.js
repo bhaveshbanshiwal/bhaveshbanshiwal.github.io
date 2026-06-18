@@ -97,6 +97,23 @@ async function fetchCodeforcesRating() {
             document.getElementById('cf-rating').innerText = 'Unavailable';
         }
     } catch (error) {
+
+
+
+// --- Dynamic Codeforces Rating Fetch ---
+async function fetchCodeforcesRating() {
+    try {
+        const response = await fetch('https://codeforces.com/api/user.info?handles=bansiwalbhavesh');
+        const data = await response.json();
+        if (data.status === 'OK') {
+            const user = data.result[0];
+            const rating = user.rating || 'Unrated';
+            const rank = user.rank || 'Beginner';
+            document.getElementById('cf-rating').innerHTML = `${rating} (${rank})`;
+        } else {
+            document.getElementById('cf-rating').innerText = 'Unavailable';
+        }
+    } catch (error) {
         document.getElementById('cf-rating').innerText = 'Unavailable';
         console.error('Error fetching CF rating:', error);
     }
@@ -107,33 +124,50 @@ fetchCodeforcesRating();
 async function fetchGitHubProjects() {
     const container = document.getElementById('projects-container');
     try {
-        // Fetch repositories sorted by updated time
-        const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=6');
-        const repos = await response.json();
+        let repos = [];
+        // First try fetching pinned repos from proxy API
+        const pinnedResponse = await fetch('https://gh-pinned-repos.egoist.dev/?username=bhaveshbanshiwal').catch(() => null);
+        if (pinnedResponse && pinnedResponse.ok) {
+            const pinnedData = await pinnedResponse.json();
+            if (Array.isArray(pinnedData) && pinnedData.length > 0) {
+                repos = pinnedData;
+            }
+        }
+
+        // Fallback if pinned repos fail or user has none
+        if (repos.length === 0) {
+            const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=6');
+            repos = await response.json();
+            // Filter forks
+            if (Array.isArray(repos)) repos = repos.filter(r => !r.fork);
+        }
         
         if (Array.isArray(repos)) {
             repos.forEach(repo => {
-                // Skip forks if desired
-                if (repo.fork) return;
-                
                 const card = document.createElement('div');
                 card.className = 'project-card glass-card reveal active';
                 
                 // Determine language tag
                 const langHtml = repo.language ? `<span class="tag-small">${repo.language}</span>` : '';
                 
-                // Determine stars
-                const starHtml = repo.stargazers_count > 0 ? `<span class="tag-small">⭐ ${repo.stargazers_count}</span>` : '';
+                // Determine stars (pinned API returns repo.stars instead of stargazers_count)
+                const stars = repo.stars || repo.stargazers_count || 0;
+                const starHtml = stars > 0 ? `<span class="tag-small">⭐ ${stars}</span>` : '';
+                
+                // Link is repo.link or repo.html_url
+                const url = repo.link || repo.html_url;
+                // Name
+                const name = (repo.repo || repo.name).replace(/-/g, ' ').replace(/_/g, ' ');
                 
                 card.innerHTML = `
                     <div class="project-content">
-                        <h3>${repo.name.replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
+                        <h3>${name}</h3>
                         <p>${repo.description || 'No description provided.'}</p>
                         <div class="project-tags">
                             ${langHtml}
                             ${starHtml}
                         </div>
-                        <a href="${repo.html_url}" target="_blank" class="project-link"><i class="fab fa-github"></i> View Repo</a>
+                        <a href="${url}" target="_blank" class="project-link"><i class="fab fa-github"></i> View Repo</a>
                     </div>
                 `;
                 container.appendChild(card);
