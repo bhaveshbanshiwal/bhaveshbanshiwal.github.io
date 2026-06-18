@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -45,6 +46,31 @@
             </div>
         </div>
     </header>
+
+    <section class="stats section" id="stats" style="padding-top: 2rem; padding-bottom: 2rem;">
+        <div class="container">
+            <h2 class="section-title">Live Coding Stats</h2>
+            <div class="projects-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+                
+                <!-- GitHub Stats -->
+                <div class="project-card glass-card reveal">
+                    <h3 style="margin-bottom: 1rem;"><i class="fab fa-github"></i> GitHub Activity</h3>
+                    <div style="overflow-x: auto; text-align: center;">
+                        <img src="https://ghchart.rshah.org/8b5cf6/bhaveshbanshiwal" alt="GitHub Contributions" style="width: 100%; min-width: 500px; height: auto; filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.3));">
+                    </div>
+                </div>
+
+                <!-- Codeforces Stats -->
+                <div class="project-card glass-card reveal delay-1">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Codeforces Rating</h3>
+                    <div style="position: relative; height: 180px; width: 100%;">
+                        <canvas id="cfChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <section class="about section" id="about">
         <div class="container">

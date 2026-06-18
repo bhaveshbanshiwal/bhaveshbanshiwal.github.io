@@ -85,25 +85,77 @@ animateCanvas();
 
 
 
-// --- Dynamic Codeforces Rating Fetch ---
-async function fetchCodeforcesRating() {
+// --- Dynamic Codeforces Rating & Graph Fetch ---
+async function fetchCodeforcesData() {
     try {
-        const response = await fetch('https://codeforces.com/api/user.info?handles=bansiwalbhavesh');
-        const data = await response.json();
-        if (data.status === 'OK') {
-            const user = data.result[0];
+        // Fetch Basic User Info for Rating
+        const infoResponse = await fetch('https://codeforces.com/api/user.info?handles=bansiwalbhavesh');
+        const infoData = await infoResponse.json();
+        if (infoData.status === 'OK') {
+            const user = infoData.result[0];
             const rating = user.rating || 'Unrated';
             const rank = user.rank || 'Beginner';
             document.getElementById('cf-rating').innerHTML = `${rating} (${rank})`;
         } else {
             document.getElementById('cf-rating').innerText = 'Unavailable';
         }
+
+        // Fetch Rating History for Graph
+        const ratingResponse = await fetch('https://codeforces.com/api/user.rating?handle=bansiwalbhavesh');
+        const ratingData = await ratingResponse.json();
+        
+        if (ratingData.status === 'OK' && ratingData.result.length > 0) {
+            const history = ratingData.result;
+            const labels = history.map(item => {
+                const date = new Date(item.ratingUpdateTimeSeconds * 1000);
+                return `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+            });
+            const dataPoints = history.map(item => item.newRating);
+            
+            const ctx = document.getElementById('cfChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Rating',
+                            data: dataPoints,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#8b5cf6',
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            y: {
+                                ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     } catch (error) {
         document.getElementById('cf-rating').innerText = 'Unavailable';
-        console.error('Error fetching CF rating:', error);
+        console.error('Error fetching CF data:', error);
     }
 }
-fetchCodeforcesRating();
+fetchCodeforcesData();
 
 // --- Dynamic GitHub Projects Fetch ---
 async function fetchGitHubProjects() {
