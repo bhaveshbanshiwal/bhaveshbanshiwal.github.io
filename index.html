@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhavesh Banshiwal | Software Engineer</title>
+    <meta name="description" content="Portfolio of Bhavesh Banshiwal - Backend Developer, DSA Enthusiast, and Robotics Builder at IIT Delhi.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Canvas for background animation -->
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">Bhavesh.</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience & Education</a></li>
+                <li><a href="#contact" class="btn-primary-small">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" id="home">
+        <div class="container hero-content">
+            <h1 class="fade-in-up">Hi, I'm <span class="gradient-text">Bhavesh Banshiwal</span></h1>
+            <h2 class="fade-in-up delay-1">Backend Dev | DSA Problem Solver | Robotics Builder</h2>
+            <p class="fade-in-up delay-2">Building at the intersection of robust backend systems, hardware, and scalable architectures. Currently pursuing my B.Tech in Mechanical Engineering at IIT Delhi.</p>
+            <div class="hero-cta fade-in-up delay-3">
+                <a href="#projects" class="btn-primary">View My Work</a>
+                <div class="social-links">
+                    <a href="https://github.com/bhaveshbanshiwal" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://codeforces.com/profile/bansiwalbhavesh" target="_blank" aria-label="Codeforces"><i class="fas fa-code"></i></a>
+                    <a href="mailto:me1240487@mech.iitd.ac.in" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="about section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-grid">
+                <div class="about-text glass-card reveal">
+                    <p>I am a second-year B.Tech student at <strong>IIT Delhi</strong> with strong skills in Python, C++, and SQL, and active practice in Data Structures and Algorithms (Codeforces Rating: <span id="cf-rating" class="gradient-text"><i class="fas fa-spinner fa-spin"></i> Loading...</span>).</p>
+                    <p>My core experience lies in backend development using Flask, Django, and WebSockets. I am highly interested in problem-solving and building scalable, robust systems. Beyond software, I bridge the gap between digital and physical systems through robotics and hardware projects.</p>
+                </div>
+                <div class="sports-achievements glass-card reveal">
+                    <h3>🏆 Sports & Achievements</h3>
+                    <ul class="achievement-list">
+                        <li><i class="fas fa-medal silver"></i> <strong>Silver</strong> - Weightlifting, IIT Delhi GC</li>
+                        <li><i class="fas fa-medal bronze"></i> <strong>Bronze</strong> - Weightlifting, Sangram IIT Roorkee</li>
+                        <li><i class="fas fa-trophy"></i> <strong>2nd Place</strong> - Powerlifting, Udgosh IIT Kanpur</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skills section" id="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Arsenal</h2>
+            <div class="skills-grid">
+                <div class="skill-category glass-card reveal">
+                    <h3><i class="fas fa-code"></i> Languages</h3>
+                    <div class="tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">C++</span>
+                        <span class="tag">SQL</span>
+                    </div>
+                </div>
+                <div class="skill-category glass-card reveal delay-1">
+                    <h3><i class="fas fa-layer-group"></i> Frameworks</h3>
+                    <div class="tags">
+                        <span class="tag">Flask</span>
+                        <span class="tag">Django</span>
+                        <span class="tag">Tkinter</span>
+                        <span class="tag">WebSockets</span>
+                    </div>
+                </div>
+                <div class="skill-category glass-card reveal delay-2">
+                    <h3><i class="fas fa-tools"></i> Tools & Deployment</h3>
+                    <div class="tags">
+                        <span class="tag">Docker</span>
+                        <span class="tag">Git</span>
+                        <span class="tag">Automation Tools</span>
+                    </div>
+                </div>
+                <div class="skill-category glass-card reveal delay-3">
+                    <h3><i class="fas fa-database"></i> Data Libraries</h3>
+                    <div class="tags">
+                        <span class="tag">NumPy</span>
+                        <span class="tag">Pandas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects section" id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid" id="projects-container">
+                <!-- Hardware Project (Static) -->
+                <div class="project-card glass-card reveal active">
+                    <div class="project-content">
+                        <h3>Anti-Pollution Helmet</h3>
+                        <p>Designed and fabricated a physical pollution-mitigating helmet prototype.</p>
+                        <div class="project-tags">
+                            <span class="tag-small">Hardware</span>
+                            <span class="tag-small">Design</span>
+                            <span class="tag-small">Prototyping</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Repos will be injected here -->
+            </div></div>
+        </div>
+    </section>
+
+    <section class="timeline-section section" id="experience">
+        <div class="container">
+            <div class="timeline-grid">
+                
+                <!-- Experience -->
+                <div class="timeline-col">
+                    <h2 class="section-title">Leadership & Experience</h2>
+                    <div class="timeline">
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <h4>Activity Head</h4>
+                            <h5>TRYST IIT Delhi (2025)</h5>
+                            <p>Handled logistics & team coordination for IIT Delhi's technical festival.</p>
+                        </div>
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <h4>Event Organizer</h4>
+                            <h5>Rendezvous IIT Delhi (2024)</h5>
+                            <p>Managed tournament operations for the cultural festival.</p>
+                        </div>
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <h4>Event Organizer</h4>
+                            <h5>Becon (2024)</h5>
+                            <p>Managed awards & guest handling.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="timeline-col">
+                    <h2 class="section-title">Education</h2>
+                    <div class="timeline">
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <h4>B.Tech Mechanical Engineering</h4>
+                            <h5>Indian Institute of Technology (IIT) Delhi | 2024 - 2028</h5>
+                            <p>Current CGPA: 6.35</p>
+                        </div>
+                        <div class="timeline-item reveal">
+                            <div class="timeline-dot"></div>
+                            <h4>High School (Science)</h4>
+                            <h5>Kendriya Vidyalaya | 2011 - 2022</h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content glass-card reveal">
+                <h2>Let's Connect</h2>
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.</p>
+                <div class="contact-info">
+                    <a href="mailto:me1240487@mech.iitd.ac.in"><i class="fas fa-envelope"></i> me1240487@mech.iitd.ac.in</a>
+                    <a href="tel:+918233281016"><i class="fas fa-phone"></i> +91 8233281016</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/bhaveshbanshiwal" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://codeforces.com/profile/bansiwalbhavesh" target="_blank"><i class="fas fa-code"></i> Codeforces</a>
+                </div>
+            </div>
+            <p class="copyright">© 2026 Bhavesh Banshiwal. Designed and built with ❤️</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
