@@ -4,7 +4,7 @@ function reveal() {
     for (var i = 0; i < reveals.length; i++) {
         var windowHeight = window.innerHeight;
         var elementTop = reveals[i].getBoundingClientRect().top;
-        var elementVisible = 100;
+        var elementVisible = 20;
 
         if (elementTop < windowHeight - elementVisible) {
             reveals[i].classList.add("active");
@@ -13,6 +13,8 @@ function reveal() {
 }
 
 window.addEventListener("scroll", reveal);
+window.addEventListener("load", reveal);
+setTimeout(reveal, 500); // Failsafe
 reveal(); // Trigger on load
 
 // --- Navbar Scroll Effect ---
@@ -97,23 +99,6 @@ async function fetchCodeforcesRating() {
             document.getElementById('cf-rating').innerText = 'Unavailable';
         }
     } catch (error) {
-
-
-
-// --- Dynamic Codeforces Rating Fetch ---
-async function fetchCodeforcesRating() {
-    try {
-        const response = await fetch('https://codeforces.com/api/user.info?handles=bansiwalbhavesh');
-        const data = await response.json();
-        if (data.status === 'OK') {
-            const user = data.result[0];
-            const rating = user.rating || 'Unrated';
-            const rank = user.rank || 'Beginner';
-            document.getElementById('cf-rating').innerHTML = `${rating} (${rank})`;
-        } else {
-            document.getElementById('cf-rating').innerText = 'Unavailable';
-        }
-    } catch (error) {
         document.getElementById('cf-rating').innerText = 'Unavailable';
         console.error('Error fetching CF rating:', error);
     }
@@ -141,7 +126,7 @@ async function fetchGitHubProjects() {
 
         // 2. Fallback if pinned repos fail, are empty, or throw an error
         if (repos.length === 0) {
-            const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=15');
+            const response = await fetch('https://api.github.com/users/bhaveshbanshiwal/repos?sort=updated&per_page=20');
             if (response.ok) {
                 const fallbackRepos = await response.json();
                 if (Array.isArray(fallbackRepos)) {
@@ -152,9 +137,10 @@ async function fetchGitHubProjects() {
                         'cp',
                         'cpp',
                         'tkinter',
-                        'ollama-python' // Assuming this is just a fork/library test
+                        'ollama-python',
+                        'CardProbbs'
                     ];
-                    repos = fallbackRepos.filter(r => !r.fork && !excludeList.includes(r.name)).slice(0, 6);
+                    repos = fallbackRepos.filter(r => !r.fork && !excludeList.includes(r.name)).slice(0, 9);
                 }
             }
         }
